@@ -1,0 +1,33 @@
+- name: create Event-Type/topic config map
+  k8s_v1_config_map:
+    name: '{{ event_type | lower }}'
+    namespace: '{{ namespace }}'
+    labels:
+      strimzi.io/kind: topic
+      strimzi.io/cluster: my-cluster
+    data:
+      name: '{{ event_type }}'
+      partitions: '1'
+      replicas: '1'
+
+- name: create deployment config
+  k8s_extensions_v1beta1_deployment:
+   name: '{{ event_type | lower }}-{{ consumer_group }}-http-sink'
+   namespace: '{{ namespace }}'
+   labels:
+     app: event-gateway
+     service: '{{ event_type }}-{{ consumer_group }}-http-sink'
+   replicas: 1
+   spec_template_metadata_labels:
+     app: event-gateway
+     service: '{{ event_type }}-{{ consumer_group }}-http-sink'
+   containers:
+   - env:
+     - name: STREAMZI_EVENT_TYPE
+       value: '{{ event_type }}'
+     - name: STREAMZI_GROUP
+       value: '{{ consumer_group }}'
+     - name: HTTP_OUTPUT_ENDPOINT
+       value: '{{ http_uri }}'
+     image: docker.io/streamzi/gw-http-sink:latest
+     name: http-sink
