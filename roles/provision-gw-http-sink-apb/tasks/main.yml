@@ -1,14 +1,13 @@
-- name: create Event-Type/topic config map
-  k8s_v1_config_map:
-    name: '{{ event_type | lower }}'
-    namespace: '{{ namespace }}'
-    labels:
-      strimzi.io/kind: topic
-      strimzi.io/cluster: my-cluster
-    data:
-      name: '{{ event_type }}'
-      partitions: '1'
-      replicas: '1'
+- name: "create Event-Type/topic CR file"
+  template:
+    src: kafka-topic.yaml.j2
+    dest: /tmp/kafka-topic.yaml
+
+- name: "Create vent-Type/topic"
+  shell: "oc create -f /tmp/kafka-topic.yaml -n {{ namespace }}"
+
+- name: "Delete vent-Type/topic Template File"
+  file: path=/tmp/kafka-topic.yaml state=absent
 
 - name: create deployment config
   k8s_extensions_v1beta1_deployment:
