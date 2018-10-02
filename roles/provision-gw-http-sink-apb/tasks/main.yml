@@ -29,6 +29,6 @@
        value: '{{ consumer_group }}'
      - name: HTTP_OUTPUT_ENDPOINT
        value: '{{ http_uri }}'
-     image: docker.io/streamzi/gw-http-sink:latest
+     image: docker.io/streamzi/cloudevents-gateway-http-sink:latest
      imagePullPolicy: IfNotPresent
      name: http-sink
