@@ -6,7 +6,7 @@
 - name: "Create vent-Type/topic"
   shell: "oc create -f /tmp/kafka-topic.yaml -n {{ namespace }}"
 
-- name: "Delete vent-Type/topic Template File"
+- name: "Delete Event-Type/topic Template File"
   file: path=/tmp/kafka-topic.yaml state=absent
 
 - name: create deployment config
