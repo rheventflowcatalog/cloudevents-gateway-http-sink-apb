@@ -3,7 +3,7 @@
     src: kafka-topic.yaml.j2
     dest: /tmp/kafka-topic.yaml
 
-- name: "Create vent-Type/topic"
+- name: "Create Event-Type/topic"
   shell: "oc create -f /tmp/kafka-topic.yaml -n {{ namespace }}"
 
 - name: "Delete Event-Type/topic Template File"
